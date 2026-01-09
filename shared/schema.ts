@@ -8,7 +8,8 @@ import { relations } from "drizzle-orm";
 export const notes = pgTable("notes", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
-  recipientEmail: text("recipient_email").notNull(),
+  recipientEmail: text("recipient_email"),
+  recipientPhone: text("recipient_phone"),
   title: text("title").notNull(),
   content: text("content").notNull(),
   isReleased: boolean("is_released").default(false),
@@ -38,7 +39,17 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   }),
 }));
 
-export const insertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, isReleased: true, userId: true });
+export const insertNoteSchema = createInsertSchema(notes)
+  .omit({ id: true, createdAt: true, isReleased: true, userId: true })
+  .extend({
+    recipientEmail: z.string().email().optional().or(z.literal("")),
+    recipientPhone: z.string().optional().or(z.literal("")),
+  })
+  .refine((data) => data.recipientEmail || data.recipientPhone, {
+    message: "Either recipient email or phone number must be provided",
+    path: ["recipientEmail"],
+  });
+
 export const insertUserSettingsSchema = createInsertSchema(userSettings).omit({ id: true, userId: true, lastCheckIn: true, status: true });
 
 export type Note = typeof notes.$inferSelect;

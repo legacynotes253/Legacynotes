@@ -1,63 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Calm, trustworthy blue-grey palette */
-  --background: 210 20% 98%;
-  --foreground: 216 20% 15%;
-
-  /* Primary: Deep, secure blue */
-  --primary: 216 30% 25%;
-  --primary-foreground: 210 20% 98%;
-
-  /* Secondary: Soft grey-blue for calm actions */
-  --secondary: 210 15% 92%;
-  --secondary-foreground: 216 30% 25%;
-
-  /* Muted: Subtle backgrounds */
-  --muted: 210 15% 95%;
-  --muted-foreground: 216 10% 45%;
-
-  /* Accent: Gentle teal for "Life/Active" signals */
-  --accent: 170 30% 45%;
+  /* Gen Z / Neo-Brutalist Palette */
+  --background: 260 100% 98%;
+  --foreground: 260 50% 10%;
+  
+  --primary: 280 100% 60%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 180 100% 50%;
+  --secondary-foreground: 260 50% 10%;
+  
+  --muted: 260 20% 90%;
+  --muted-foreground: 260 10% 40%;
+  
+  --accent: 320 100% 60%;
   --accent-foreground: 0 0% 100%;
-
-  /* Destructive: Restrained red */
-  --destructive: 0 40% 50%;
-  --destructive-foreground: 0 0% 98%;
-
-  /* Border & Inputs */
-  --border: 214 15% 90%;
-  --input: 214 15% 90%;
-  --ring: 216 30% 25%;
-
-  --radius: 0.75rem;
-
-  /* Typography variables */
-  --font-serif: 'Cinzel', serif;
-  --font-sans: 'Inter', sans-serif;
-}
-
-.dark {
-  /* Dark mode variants if needed, though 'paper' feel is preferred */
-  --background: 216 20% 10%;
-  --foreground: 210 20% 90%;
-  --primary: 210 20% 90%;
-  --primary-foreground: 216 30% 25%;
-  --secondary: 216 20% 15%;
-  --secondary-foreground: 210 20% 90%;
-  --muted: 216 20% 15%;
-  --muted-foreground: 210 15% 60%;
-  --accent: 170 30% 45%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 40% 50%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 216 20% 20%;
-  --input: 216 20% 20%;
-  --ring: 210 20% 90%;
+  
+  --destructive: 0 100% 60%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 0 0% 0%;
+  --input: 0 0% 0%;
+  --ring: 280 100% 60%;
+  
+  --radius: 0rem;
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-serif: 'Space Grotesk', sans-serif;
 }
 
 @layer base {
@@ -68,21 +41,18 @@
     @apply bg-background text-foreground antialiased font-sans;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight;
+    @apply font-bold tracking-tighter uppercase italic;
   }
 }
 
-/* Custom Utilities for visual depth */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .neo-shadow {
+    @apply shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
   }
-  
-  .glass-panel {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl shadow-black/5;
+  .neo-shadow-lg {
+    @apply shadow-[8px_8px_0px_0px_rgba(0,0,0,1)];
   }
-  
-  .paper-card {
-    @apply bg-white border border-border shadow-sm hover:shadow-md transition-all duration-300;
+  .neo-button {
+    @apply border-2 border-black neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:translate-x-[4px] active:translate-y-[4px];
   }
 }

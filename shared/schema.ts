@@ -39,8 +39,9 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   }),
 }));
 
-export const insertNoteSchema = createInsertSchema(notes)
-  .omit({ id: true, createdAt: true, isReleased: true, userId: true })
+export const baseInsertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, isReleased: true, userId: true });
+
+export const insertNoteSchema = baseInsertNoteSchema
   .extend({
     recipientEmail: z.string().email().optional().or(z.literal("")),
     recipientPhone: z.string().optional().or(z.literal("")),

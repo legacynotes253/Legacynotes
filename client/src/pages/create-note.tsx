@@ -184,7 +184,7 @@ export default function CreateNote() {
                         <FormControl>
                           <Textarea
                             placeholder="Write your story here..."
-                            className="min-h-[400px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
+                            className="min-h-[250px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
                             {...field}
                           />
                         </FormControl>

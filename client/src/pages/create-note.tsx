@@ -65,7 +65,7 @@ export default function CreateNote() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 pb-24 pt-12 px-6">
+    <div className="max-w-4xl mx-auto space-y-8 pb-24 pt-12 px-6">
       <div className="flex flex-col gap-4">
         <Link href="/notes">
           <Button variant="ghost" size="sm" className="w-fit -ml-2 text-muted-foreground hover:text-primary rounded-full hover:bg-primary/5 transition-all">
@@ -79,7 +79,7 @@ export default function CreateNote() {
           </h1>
           <p className="text-muted-foreground font-medium flex items-center gap-2">
             <Lock className="w-4 h-4 text-primary/40" />
-            Locked tight! Released only when you're away.
+            Locked tight! Only shared when you're away.
           </p>
         </div>
       </div>
@@ -87,17 +87,17 @@ export default function CreateNote() {
       <div className="bg-white border-2 border-border/50 rounded-[2.5rem] p-10 shadow-xl shadow-primary/5">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
               <FormField
                 control={form.control}
                 name="recipientEmail"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel className="text-lg font-bold text-foreground/80">Recipient Email</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-4 top-4 w-5 h-5 text-muted-foreground/30" />
-                        <Input placeholder="lovedone@example.com" {...field} className="h-14 pl-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium" />
+                        <Input placeholder="lovedone@example.com" {...field} className="h-14 pl-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full" />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -109,12 +109,12 @@ export default function CreateNote() {
                 control={form.control}
                 name="recipientPhone"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel className="text-lg font-bold text-foreground/80">Recipient Phone</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Phone className="absolute left-4 top-4 w-5 h-5 text-muted-foreground/30" />
-                        <Input placeholder="+1 234 567 890" {...field} className="h-14 pl-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium" />
+                        <Input placeholder="+1 234 567 890" {...field} className="h-14 pl-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full" />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -146,7 +146,7 @@ export default function CreateNote() {
                   <FormControl>
                     <Textarea
                       placeholder="Write your story here..."
-                      className="min-h-[250px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
+                      className="min-h-[300px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
                       {...field}
                     />
                   </FormControl>

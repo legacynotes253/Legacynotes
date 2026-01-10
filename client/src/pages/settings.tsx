@@ -8,12 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
-import { Slider } from "@/components/ui/slider";
 import { ShieldAlert, Clock, Info } from "lucide-react";
 
 const settingsSchema = z.object({
-  checkInFrequencyDays: z.number().min(1).max(365),
-  releaseDelayDays: z.number().min(1).max(90),
+  checkInFrequencyDays: z.coerce.number().min(1).max(365),
+  releaseDelayDays: z.coerce.number().min(1).max(90),
 });
 
 type SettingsValues = z.infer<typeof settingsSchema>;
@@ -84,52 +83,52 @@ export default function SettingsPage() {
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <Label>Every {form.watch("checkInFrequencyDays")} days</Label>
-                  <span className="text-sm text-muted-foreground">Range: 1-365 days</span>
+                  <Label htmlFor="checkInFrequencyDays">Check-in every (days)</Label>
+                  <span className="text-sm text-muted-foreground font-medium bg-muted px-2 py-1 rounded">Range: 1-365 days</span>
                 </div>
-                <Slider
+                <Input
+                  id="checkInFrequencyDays"
+                  type="number"
                   min={1}
                   max={365}
-                  step={1}
-                  value={[form.watch("checkInFrequencyDays")]}
-                  onValueChange={(val) => form.setValue("checkInFrequencyDays", val[0])}
-                  className="py-4"
+                  {...form.register("checkInFrequencyDays")}
+                  className="h-14 border-2 border-secondary/20 rounded-2xl focus-visible:ring-secondary/20 bg-muted/20 text-lg font-medium"
                 />
-                <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground flex items-start gap-2">
-                  <Info className="w-4 h-4 mt-0.5 shrink-0" />
-                  We will send you an email reminder to check in. If you miss a check-in, we will start the release countdown.
+                <div className="bg-muted/50 p-4 rounded-2xl text-sm text-muted-foreground flex items-start gap-2 border-2 border-dashed border-secondary/10">
+                  <Info className="w-4 h-4 mt-0.5 shrink-0 text-secondary" />
+                  We'll ping you every {form.watch("checkInFrequencyDays") || 30} days. If you don't respond, we'll start the countdown.
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="mb-6">
+          <Card className="mb-8 border-4 border-dashed border-primary/20 rounded-[2rem] shadow-none bg-transparent">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ShieldAlert className="w-5 h-5 text-primary" />
-                Release Delay
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <ShieldAlert className="w-6 h-6 text-primary" />
+                Wait Time
               </CardTitle>
-              <CardDescription>
-                Once we determine you are inactive, how long should we wait before releasing notes?
+              <CardDescription className="text-base font-medium">
+                How many days should we wait before sharing your secrets?
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <Label>Wait {form.watch("releaseDelayDays")} days after inactivity</Label>
-                  <span className="text-sm text-muted-foreground">Range: 1-90 days</span>
+                  <Label htmlFor="releaseDelayDays">Wait period (days)</Label>
+                  <span className="text-sm text-muted-foreground font-medium bg-muted px-2 py-1 rounded">Range: 1-90 days</span>
                 </div>
-                <Slider
+                <Input
+                  id="releaseDelayDays"
+                  type="number"
                   min={1}
                   max={90}
-                  step={1}
-                  value={[form.watch("releaseDelayDays")]}
-                  onValueChange={(val) => form.setValue("releaseDelayDays", val[0])}
-                  className="py-4"
+                  {...form.register("releaseDelayDays")}
+                  className="h-14 border-2 border-primary/20 rounded-2xl focus-visible:ring-primary/20 bg-muted/20 text-lg font-medium"
                 />
-                <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground flex items-start gap-2">
-                  <Info className="w-4 h-4 mt-0.5 shrink-0" />
-                  This is a grace period. During this time, we will attempt to contact you and your trusted contacts (if configured) daily.
+                <div className="bg-muted/50 p-4 rounded-2xl text-sm text-muted-foreground flex items-start gap-2 border-2 border-dashed border-primary/10">
+                  <Info className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+                  We'll wait {form.watch("releaseDelayDays") || 7} days after a missed check-in before the release.
                 </div>
               </div>
             </CardContent>

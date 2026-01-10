@@ -194,10 +194,10 @@ export default function CreateNote() {
                   />
 
                   <div className="flex justify-between pt-6">
-                    <Button type="button" variant="ghost" onClick={prevStep} className="px-8 h-16 text-primary font-bold text-lg rounded-full">
-                      <ArrowLeft className="mr-2 w-6 h-6" /> Go Back
+                    <Button type="button" variant="ghost" onClick={prevStep} className="px-6 h-12 text-muted-foreground hover:text-primary font-bold text-lg rounded-full">
+                      <ArrowLeft className="mr-2 w-5 h-5" /> Go Back
                     </Button>
-                    <Button type="submit" size="lg" disabled={isPending} className="px-16 h-16 bg-primary hover:bg-primary/90 text-primary-foreground text-xl font-bold rounded-full shadow-lg shadow-primary/10 hover:scale-105 active:scale-95 transition-all">
+                    <Button type="submit" size="lg" disabled={isPending} className="px-10 h-12 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
                       {isPending ? "Securing..." : "Keep it Safe! ✨"}
                     </Button>
                   </div>

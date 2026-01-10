@@ -1,36 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Timeless / Elegant Palette */
-  --background: 40 20% 98%;
-  --foreground: 20 10% 15%;
+  /* Playful / Nostalgic "Crayon Box" Palette */
+  --background: 35 100% 95%; /* Soft cream / paper */
+  --foreground: 220 20% 20%;
   
-  --primary: 20 10% 25%;
-  --primary-foreground: 40 20% 98%;
+  --primary: 350 80% 65%;   /* Crayon Red */
+  --primary-foreground: 0 0% 100%;
   
-  --secondary: 35 15% 90%;
-  --secondary-foreground: 20 10% 25%;
+  --secondary: 190 70% 60%;  /* Sky Blue */
+  --secondary-foreground: 220 20% 20%;
   
-  --muted: 35 15% 94%;
-  --muted-foreground: 20 5% 45%;
+  --muted: 35 50% 90%;
+  --muted-foreground: 220 10% 45%;
   
-  --accent: 35 25% 40%;
-  --accent-foreground: 40 20% 98%;
+  --accent: 45 90% 60%;    /* Sun Yellow */
+  --accent-foreground: 220 20% 20%;
   
-  --destructive: 0 40% 45%;
-  --destructive-foreground: 40 20% 98%;
+  --destructive: 0 80% 60%;
+  --destructive-foreground: 0 0% 100%;
   
-  --border: 35 15% 85%;
-  --input: 35 15% 85%;
-  --ring: 20 10% 25%;
+  --border: 35 30% 80%;
+  --input: 35 30% 80%;
+  --ring: 350 80% 65%;
   
-  --radius: 0.25rem;
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Libre+Baskerville', serif;
+  --radius: 1.5rem; /* Very rounded / bubbly */
+  --font-sans: 'Quicksand', sans-serif;
+  --font-serif: 'Fredoka', sans-serif;
 }
 
 @layer base {
@@ -41,15 +41,15 @@
     @apply bg-background text-foreground antialiased font-sans;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight text-primary;
+    @apply font-serif tracking-normal text-primary;
   }
 }
 
 @layer utilities {
-  .timeless-shadow {
-    @apply shadow-sm;
+  .nostalgic-shadow {
+    @apply shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)];
   }
-  .elegant-border {
-    @apply border border-border/50;
+  .bouncy-hover {
+    @apply transition-transform hover:scale-105 active:scale-95;
   }
 }

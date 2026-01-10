@@ -160,8 +160,8 @@ export default function CreateNote() {
                   </div>
                   
                   <div className="flex justify-end pt-6">
-                    <Button type="button" size="lg" onClick={nextStep} className="px-10 h-16 bg-primary hover:bg-primary/90 text-primary-foreground text-xl font-bold rounded-full shadow-lg shadow-primary/10 hover:scale-105 active:scale-95 transition-all">
-                      Next: Write Message <ChevronRight className="ml-2 w-6 h-6" />
+                    <Button type="button" onClick={nextStep} className="px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
+                      Next: Write Message <ChevronRight className="ml-2 w-5 h-5" />
                     </Button>
                   </div>
                 </motion.div>

@@ -94,29 +94,29 @@ export default function SettingsPage() {
                   {...form.register("checkInFrequencyDays")}
                   className="h-14 border-2 border-secondary/20 rounded-2xl focus-visible:ring-secondary/20 bg-muted/20 text-lg font-medium"
                 />
-                <div className="bg-muted/50 p-4 rounded-2xl text-sm text-muted-foreground flex items-start gap-2 border-2 border-dashed border-secondary/10">
-                  <Info className="w-4 h-4 mt-0.5 shrink-0 text-secondary" />
-                  We'll ping you every {form.watch("checkInFrequencyDays") || 30} days. If you don't respond, we'll start the countdown.
+                <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground flex items-start gap-2 border border-border/50">
+                  <Info className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+                  We'll check in with you every {form.watch("checkInFrequencyDays") || 30} days.
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="mb-8 border-4 border-dashed border-primary/20 rounded-[2rem] shadow-none bg-transparent">
+          <Card className="mb-8 border border-border shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <ShieldAlert className="w-6 h-6 text-primary" />
-                Wait Time
+              <CardTitle className="flex items-center gap-2">
+                <ShieldAlert className="w-5 h-5 text-primary" />
+                Release Delay
               </CardTitle>
-              <CardDescription className="text-base font-medium">
-                How many days should we wait before sharing your secrets?
+              <CardDescription>
+                How many days should we wait before sharing your notes after a missed check-in?
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <Label htmlFor="releaseDelayDays">Wait period (days)</Label>
-                  <span className="text-sm text-muted-foreground font-medium bg-muted px-2 py-1 rounded">Range: 1-90 days</span>
+                  <span className="text-xs text-muted-foreground font-medium bg-secondary px-2 py-1 rounded">Range: 1-90</span>
                 </div>
                 <Input
                   id="releaseDelayDays"
@@ -124,11 +124,10 @@ export default function SettingsPage() {
                   min={1}
                   max={90}
                   {...form.register("releaseDelayDays")}
-                  className="h-14 border-2 border-primary/20 rounded-2xl focus-visible:ring-primary/20 bg-muted/20 text-lg font-medium"
                 />
-                <div className="bg-muted/50 p-4 rounded-2xl text-sm text-muted-foreground flex items-start gap-2 border-2 border-dashed border-primary/10">
+                <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground flex items-start gap-2 border border-border/50">
                   <Info className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
-                  We'll wait {form.watch("releaseDelayDays") || 7} days after a missed check-in before the release.
+                  Notes will be shared {form.watch("releaseDelayDays") || 7} days after a missed check-in.
                 </div>
               </div>
             </CardContent>

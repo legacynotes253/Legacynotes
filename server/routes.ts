@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import { sendSms } from "./lib/twilio";
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
   // Setup Auth FIRST
@@ -65,6 +66,17 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     const userId = req.user.claims.sub;
     const settings = await storage.checkInUser(userId);
     res.json(settings);
+  });
+
+  // Test Route for SMS (Optional/Internal)
+  app.post("/api/test-sms", isAuthenticated, async (req: any, res) => {
+    const { to, message } = req.body;
+    try {
+      await sendSms(to, message);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
   });
 
   return httpServer;

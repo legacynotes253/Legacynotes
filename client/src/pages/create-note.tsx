@@ -49,14 +49,14 @@ export default function CreateNote() {
     createNote(data, {
       onSuccess: () => {
         toast({
-          title: "Note Locked In 🔒",
-          description: "Your digital time capsule is ready.",
+          title: "Note Secured",
+          description: "Your message has been safely encrypted.",
         });
         setLocation("/notes");
       },
       onError: (error) => {
         toast({
-          title: "Vibe Check Failed",
+          title: "Error",
           description: error.message,
           variant: "destructive",
         });
@@ -65,36 +65,37 @@ export default function CreateNote() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 pb-12 pt-8">
-      <div className="flex flex-col gap-4">
+    <div className="max-w-2xl mx-auto space-y-12 pb-24 pt-12 px-6">
+      <div className="flex flex-col gap-6">
         <Link href="/notes">
-          <Button variant="outline" size="sm" className="w-fit border-2 border-black neo-shadow hover:shadow-none transition-all">
+          <Button variant="ghost" size="sm" className="w-fit -ml-2 text-muted-foreground hover:text-primary transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Notes
           </Button>
         </Link>
-        <div className="space-y-1">
-          <h1 className="text-5xl font-black uppercase tracking-tighter text-primary italic">Create Secure Note</h1>
-          <p className="text-xl font-bold flex items-center gap-2">
-            <Lock className="w-5 h-5 text-primary" />
-            Locked in. Released only when you're offline.
+        <div className="space-y-3">
+          <h1 className="text-4xl font-serif text-primary">Compose Legacy</h1>
+          <p className="text-muted-foreground font-light tracking-wide flex items-center gap-2">
+            <Lock className="w-4 h-4" />
+            Your words are private, released only when you choose.
           </p>
         </div>
       </div>
 
-      <div className="bg-white border-4 border-black p-8 neo-shadow-lg">
+      <div className="bg-white border border-border/60 rounded-sm p-10 shadow-sm">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <FormField
                 control={form.control}
                 name="recipientEmail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-black uppercase flex items-center gap-2">
-                      <Mail className="w-5 h-5" /> Email
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium uppercase tracking-widest text-muted-foreground/80">Recipient Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="bestie@example.com" {...field} className="h-14 border-2 border-black rounded-none focus-visible:ring-0 focus-visible:border-primary text-lg font-medium" />
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground/50" />
+                        <Input placeholder="email@address.com" {...field} className="h-11 pl-10 border-border/50 focus-visible:ring-primary/20 bg-muted/30" />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -106,11 +107,12 @@ export default function CreateNote() {
                 name="recipientPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-black uppercase flex items-center gap-2">
-                      <Phone className="w-5 h-5" /> Phone
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium uppercase tracking-widest text-muted-foreground/80">Recipient Phone</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1234567890" {...field} className="h-14 border-2 border-black rounded-none focus-visible:ring-0 focus-visible:border-primary text-lg font-medium" />
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-3 w-4 h-4 text-muted-foreground/50" />
+                        <Input placeholder="+1 234 567 890" {...field} className="h-11 pl-10 border-border/50 focus-visible:ring-primary/20 bg-muted/30" />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -123,9 +125,9 @@ export default function CreateNote() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-xl font-black uppercase">Title / Subject</FormLabel>
+                  <FormLabel className="text-sm font-medium uppercase tracking-widest text-muted-foreground/80">Subject</FormLabel>
                   <FormControl>
-                    <Input placeholder="The real tea..." {...field} className="h-14 border-2 border-black rounded-none focus-visible:ring-0 focus-visible:border-primary text-lg font-medium" />
+                    <Input placeholder="A final message..." {...field} className="h-11 border-border/50 focus-visible:ring-primary/20 bg-muted/30" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -137,11 +139,11 @@ export default function CreateNote() {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-xl font-black uppercase">Message Content</FormLabel>
+                  <FormLabel className="text-sm font-medium uppercase tracking-widest text-muted-foreground/80">Content</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Spill here..."
-                      className="min-h-[250px] resize-y p-6 border-2 border-black rounded-none focus-visible:ring-0 focus-visible:border-primary text-lg leading-relaxed font-medium"
+                      placeholder="Share your thoughts..."
+                      className="min-h-[300px] resize-none p-6 border-border/50 focus-visible:ring-primary/20 bg-muted/30 text-base leading-relaxed"
                       {...field}
                     />
                   </FormControl>
@@ -151,8 +153,8 @@ export default function CreateNote() {
             />
 
             <div className="flex justify-end pt-4">
-              <Button type="submit" size="lg" disabled={isPending} className="h-20 px-12 text-2xl font-black uppercase italic tracking-widest border-4 border-black bg-primary hover:bg-primary/90 text-primary-foreground rounded-none neo-shadow active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
-                {isPending ? "Locking..." : "Lock In Note"}
+              <Button type="submit" size="lg" disabled={isPending} className="px-12 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-sm transition-all shadow-md">
+                {isPending ? "Securing..." : "Secure Note"}
               </Button>
             </div>
           </form>

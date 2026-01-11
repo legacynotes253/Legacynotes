@@ -12,6 +12,7 @@ import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import NotesList from "@/pages/notes-list";
 import CreateNote from "@/pages/create-note";
+import EditNote from "@/pages/edit-note";
 import SettingsPage from "@/pages/settings";
 import Layout from "@/components/layout";
 
@@ -22,6 +23,7 @@ function AuthenticatedApp() {
         <Route path="/" component={Dashboard} />
         <Route path="/notes" component={NotesList} />
         <Route path="/notes/new" component={CreateNote} />
+        <Route path="/notes/edit/:id" component={EditNote} />
         <Route path="/settings" component={SettingsPage} />
         <Route component={NotFound} />
       </Switch>

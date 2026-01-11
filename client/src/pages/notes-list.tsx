@@ -1,6 +1,6 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar, Paperclip, Phone } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2 } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import {
@@ -132,6 +132,11 @@ export default function NotesList() {
               </div>
 
               <div className="flex items-center gap-3">
+                <Button asChild variant="ghost" size="icon" className="w-11 h-11 rounded-full text-primary hover:text-primary hover:bg-primary/10 transition-all">
+                  <Link href={`/notes/edit/${note.id}`}>
+                    <Edit2 className="w-5 h-5" />
+                  </Link>
+                </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon" className="w-11 h-11 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10 transition-all">

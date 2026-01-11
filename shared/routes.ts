@@ -28,7 +28,13 @@ export const api = {
     update: {
       method: 'PATCH' as const,
       path: '/api/notes/:id',
-      input: insertNoteSchema.partial(),
+      input: z.object({
+        title: z.string().optional(),
+        content: z.string().optional(),
+        recipientEmail: z.string().optional().or(z.literal("")),
+        recipientPhone: z.string().optional().or(z.literal("")),
+        attachments: z.array(z.string()).optional(),
+      }),
       responses: { 200: z.custom<typeof notes.$inferSelect>() },
     },
   },

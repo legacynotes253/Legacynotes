@@ -54,3 +54,26 @@ export function useDeleteNote() {
     },
   });
 }
+
+export function useUpdateNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<CreateNoteInput> }) => {
+      const url = buildUrl(api.notes.update.path, { id });
+      const res = await fetch(url, {
+        method: api.notes.update.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to update note");
+      }
+      return api.notes.update.responses[200].parse(await res.json());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [api.notes.list.path] });
+    },
+  });
+}

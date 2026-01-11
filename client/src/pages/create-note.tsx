@@ -217,7 +217,9 @@ export default function CreateNote() {
                                   onGetUploadParameters={getUploadParameters}
                                   onComplete={(result) => {
                                     if (result.successful) {
-                                      const newUrls = result.successful.map(f => f.response?.body?.objectPath || f.uploadURL);
+                                      const newUrls = result.successful
+                                        .map(f => (f.response?.body as any)?.objectPath || f.uploadURL)
+                                        .filter((url): url is string => typeof url === 'string');
                                       setAttachments(prev => [...prev, ...newUrls]);
                                     }
                                   }}

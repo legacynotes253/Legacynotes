@@ -28,7 +28,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createNote(userId: string, note: InsertNote): Promise<Note> {
-    const [created] = await db.insert(notes).values({ ...note, userId }).returning();
+    const [created] = await db.insert(notes).values({ 
+      userId,
+      recipientEmail: note.recipientEmail,
+      recipientPhone: note.recipientPhone,
+      title: note.title,
+      content: note.content,
+      attachments: note.attachments || []
+    }).returning();
     return created;
   }
 

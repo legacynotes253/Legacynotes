@@ -12,6 +12,7 @@ export const notes = pgTable("notes", {
   recipientPhone: text("recipient_phone"),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  attachments: text("attachments").array(), // Array of file URLs or JSON strings
   isReleased: boolean("is_released").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -45,6 +46,7 @@ export const insertNoteSchema = baseInsertNoteSchema
   .extend({
     recipientEmail: z.string().email().optional().or(z.literal("")),
     recipientPhone: z.string().optional().or(z.literal("")),
+    attachments: z.array(z.string()).optional(),
   })
   .refine((data) => data.recipientEmail || data.recipientPhone, {
     message: "Either recipient email or phone number must be provided",

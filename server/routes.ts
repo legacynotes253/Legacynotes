@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendSms } from "./lib/twilio";
@@ -10,6 +11,7 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   // Setup Auth FIRST
   await setupAuth(app);
   registerAuthRoutes(app);
+  registerObjectStorageRoutes(app);
 
   // Notes Routes
   app.get(api.notes.list.path, isAuthenticated, async (req: any, res) => {

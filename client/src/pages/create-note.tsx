@@ -15,10 +15,12 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool } from "lucide-react";
+import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ObjectUploader } from "@/components/ObjectUploader";
+import { useUpload } from "@/hooks/use-upload";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -38,6 +40,9 @@ export default function CreateNote() {
   const [, setLocation] = useLocation();
   const [step, setStep] = useState(1);
 
+  const { getUploadParameters } = useUpload();
+  const [attachments, setAttachments] = useState<string[]>([]);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,7 +54,7 @@ export default function CreateNote() {
   });
 
   const onSubmit = (data: FormValues) => {
-    createNote(data, {
+    createNote({ ...data, attachments }, {
       onSuccess: () => {
         toast({
           title: "Note Saved ✨",
@@ -182,11 +187,48 @@ export default function CreateNote() {
                           <PenTool className="w-5 h-5" /> Your Secret Message
                         </FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="Write your story here..."
-                            className="min-h-[250px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
-                            {...field}
-                          />
+                          <div className="space-y-4">
+                            <Textarea
+                              placeholder="Write your story here..."
+                              className="min-h-[200px] resize-none p-6 border-2 border-border/40 rounded-[2.5rem] focus-visible:ring-primary/10 bg-muted/20 text-lg leading-relaxed font-medium"
+                              {...field}
+                            />
+                            
+                            <div className="space-y-3">
+                              <FormLabel className="text-sm font-bold text-foreground/60 flex items-center gap-2">
+                                <Paperclip className="w-4 h-4" /> Attachments (Optional)
+                              </FormLabel>
+                              
+                              <div className="flex flex-wrap gap-2">
+                                {attachments.map((url, index) => (
+                                  <div key={index} className="flex items-center gap-2 bg-primary/5 border border-primary/10 px-3 py-1.5 rounded-full text-sm font-medium text-primary">
+                                    <span className="max-w-[150px] truncate">{url.split('/').pop()}</span>
+                                    <button 
+                                      type="button" 
+                                      onClick={() => setAttachments(prev => prev.filter((_, i) => i !== index))}
+                                      className="hover:text-primary/70 transition-colors"
+                                    >
+                                      <X className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                                
+                                <ObjectUploader
+                                  onGetUploadParameters={getUploadParameters}
+                                  onComplete={(result) => {
+                                    if (result.successful) {
+                                      const newUrls = result.successful.map(f => f.response?.body?.objectPath || f.uploadURL);
+                                      setAttachments(prev => [...prev, ...newUrls]);
+                                    }
+                                  }}
+                                  maxNumberOfFiles={5}
+                                  buttonClassName="h-9 px-4 rounded-full border-2 border-dashed border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary font-bold text-sm transition-all flex items-center gap-2"
+                                >
+                                  <Paperclip className="w-4 h-4" /> Add Files
+                                </ObjectUploader>
+                              </div>
+                            </div>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

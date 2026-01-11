@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import { ShieldAlert, Clock, Info, Bell, Send, PalmTree } from "lucide-react";
+import { ShieldAlert, Clock, Info, Bell, Send, Palm } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { Switch } from "@/components/ui/switch";
 
@@ -111,7 +111,7 @@ export default function SettingsPage() {
           <Card className="border-2 border-border/50 rounded-[2.5rem] shadow-none bg-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-2xl">
-                <PalmTree className="w-6 h-6 text-primary" />
+                <Palm className="w-6 h-6 text-primary" />
                 Vacation Mode
               </CardTitle>
               <CardDescription className="text-base font-medium">

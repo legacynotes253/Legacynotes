@@ -25,6 +25,7 @@ export const userSettings = pgTable("user_settings", {
   lastNotificationSent: timestamp("last_notification_sent"),
   notificationPhone: text("notification_phone"),
   releaseDelayDays: integer("release_delay_days").default(7).notNull(),
+  isVacationMode: boolean("is_vacation_mode").default(false).notNull(),
   status: text("status").default("active").notNull(), // active, warning, released
 });
 

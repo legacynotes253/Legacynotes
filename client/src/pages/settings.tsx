@@ -8,13 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import { ShieldAlert, Clock, Info, Bell, Send } from "lucide-react";
+import { ShieldAlert, Clock, Info, Bell, Send, PalmTree } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { Switch } from "@/components/ui/switch";
 
 const settingsSchema = z.object({
   checkInFrequencyDays: z.coerce.number().min(1).max(365),
   releaseDelayDays: z.coerce.number().min(1).max(90),
   notificationPhone: z.string().optional().or(z.literal("")),
+  isVacationMode: z.boolean().default(false),
 });
 
 type SettingsValues = z.infer<typeof settingsSchema>;
@@ -31,6 +33,7 @@ export default function SettingsPage() {
       checkInFrequencyDays: 30,
       releaseDelayDays: 7,
       notificationPhone: "",
+      isVacationMode: false,
     },
   });
 
@@ -40,6 +43,7 @@ export default function SettingsPage() {
         checkInFrequencyDays: settings.checkInFrequencyDays,
         releaseDelayDays: settings.releaseDelayDays,
         notificationPhone: settings.notificationPhone || "",
+        isVacationMode: settings.isVacationMode,
       });
     }
   }, [settings, form]);
@@ -104,6 +108,32 @@ export default function SettingsPage() {
 
       <div className="grid gap-6">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <Card className="border-2 border-border/50 rounded-[2.5rem] shadow-none bg-white">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <PalmTree className="w-6 h-6 text-primary" />
+                Vacation Mode
+              </CardTitle>
+              <CardDescription className="text-base font-medium">
+                Pause reminders and system activity while you're away.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between bg-muted/30 p-6 rounded-[1.5rem] border-2 border-dashed border-border/10">
+                <div className="space-y-1">
+                  <h4 className="text-lg font-bold">Activate Vacation Mode</h4>
+                  <p className="text-sm text-muted-foreground font-medium">
+                    This will pause all check-in requirements until turned off.
+                  </p>
+                </div>
+                <Switch 
+                  checked={form.watch("isVacationMode")}
+                  onCheckedChange={(checked) => form.setValue("isVacationMode", checked)}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
           <Card className="border-2 border-border/50 rounded-[2.5rem] shadow-none bg-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-2xl">

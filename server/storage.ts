@@ -43,6 +43,18 @@ export class DatabaseStorage implements IStorage {
     await db.delete(notes).where(and(eq(notes.id, id), eq(notes.userId, userId)));
   }
 
+  async updateNote(userId: string, id: number, updates: Partial<InsertNote>): Promise<Note> {
+    const [updated] = await db.update(notes)
+      .set(updates)
+      .where(and(eq(notes.id, id), eq(notes.userId, userId)))
+      .returning();
+    
+    if (!updated) {
+      throw new Error("Note not found or unauthorized");
+    }
+    return updated;
+  }
+
   async getUserSettings(userId: string): Promise<UserSettings | undefined> {
     const [settings] = await db.select().from(userSettings).where(eq(userSettings.userId, userId));
     return settings;

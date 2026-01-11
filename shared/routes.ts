@@ -25,6 +25,12 @@ export const api = {
       path: '/api/notes/:id',
       responses: { 204: z.void() },
     },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/notes/:id',
+      input: insertNoteSchema.partial(),
+      responses: { 200: z.custom<typeof notes.$inferSelect>() },
+    },
   },
   settings: {
     get: {

@@ -40,6 +40,20 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     res.status(204).send();
   });
 
+  app.patch(api.notes.update.path, isAuthenticated, async (req: any, res) => {
+    try {
+      const input = api.notes.update.input.parse(req.body);
+      const userId = req.user.claims.sub;
+      const note = await storage.updateNote(userId, Number(req.params.id), input);
+      res.json(note);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      res.status(404).json({ message: (err as Error).message });
+    }
+  });
+
   // Settings Routes
   app.get(api.settings.get.path, isAuthenticated, async (req: any, res) => {
     const userId = req.user.claims.sub;

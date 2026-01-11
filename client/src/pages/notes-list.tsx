@@ -1,6 +1,6 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import {
@@ -41,7 +41,7 @@ export default function NotesList() {
             Secure messages waiting to be delivered.
           </p>
         </div>
-        <Button asChild className="gap-2 shadow-md">
+        <Button asChild className="gap-2 shadow-md rounded-full h-11 px-6">
           <Link href="/notes/new">
             <Plus className="w-4 h-4" /> New Note
           </Link>
@@ -51,74 +51,104 @@ export default function NotesList() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-muted/50 rounded-lg animate-pulse" />
+            <div key={i} className="h-24 bg-muted/50 rounded-xl animate-pulse" />
           ))}
         </div>
       ) : notes?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center border rounded-xl bg-muted/10">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-            <Mail className="w-8 h-8 text-muted-foreground" />
+        <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed rounded-[2rem] bg-muted/5">
+          <div className="w-16 h-16 bg-muted/20 rounded-full flex items-center justify-center mb-4">
+            <Mail className="w-8 h-8 text-muted-foreground/50" />
           </div>
-          <h2 className="text-xl font-semibold mb-2">No notes created yet</h2>
-          <p className="text-muted-foreground max-w-md mb-6">
+          <h2 className="text-xl font-bold mb-2">No notes created yet</h2>
+          <p className="text-muted-foreground max-w-md mb-6 font-medium">
             Write your first message to a loved one. It will remain encrypted and private until released.
           </p>
-          <Button asChild>
-            <Link href="/notes/new">Create Note</Link>
+          <Button asChild className="rounded-full h-12 px-8 font-bold">
+            <Link href="/notes/new">Create Your First Note</Link>
           </Button>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-6">
           {notes?.map((note) => (
             <div
               key={note.id}
-              className="group bg-white border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="group bg-white border-2 border-border/40 rounded-[2rem] p-8 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
             >
-              <div className="space-y-1 flex-1">
+              <div className="space-y-4 flex-1">
                 <div className="flex items-center justify-between md:justify-start gap-4">
-                  <h3 className="font-semibold text-lg text-foreground">{note.title}</h3>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 md:hidden">
-                    Private
+                  <h3 className="font-bold text-xl text-primary">{note.title}</h3>
+                  <span className="text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/10">
+                    Secure
                   </span>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5" />
-                    {note.recipientEmail}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5" />
-                    Created {format(new Date(note.createdAt!), "MMM d, yyyy")}
+                
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground">
+                  {note.recipientEmail && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
+                        <Mail className="w-4 h-4 text-primary/60" />
+                      </div>
+                      {note.recipientEmail}
+                    </div>
+                  )}
+                  {note.recipientPhone && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
+                        <Phone className="w-4 h-4 text-primary/60" />
+                      </div>
+                      {note.recipientPhone}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
+                      <Calendar className="w-4 h-4 text-primary/60" />
+                    </div>
+                    {format(new Date(note.createdAt!), "MMM d, yyyy")}
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2 line-clamp-1 max-w-2xl">
-                  {note.content}
-                </p>
+
+                <div className="bg-muted/10 p-4 rounded-2xl">
+                  <p className="text-sm text-foreground/70 line-clamp-2 leading-relaxed font-medium">
+                    {note.content}
+                  </p>
+                </div>
+
+                {note.attachments && note.attachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {note.attachments.map((url: string, idx: number) => (
+                      <a 
+                        key={idx} 
+                        href={url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-primary/5 border border-primary/10 px-3 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-primary/10 transition-colors"
+                      >
+                        <Paperclip className="w-3 h-3" />
+                        {url.split('/').pop()}
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                <span className="hidden md:inline-block text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 mr-2">
-                  Encrypted & Private
-                </span>
-                
+              <div className="flex items-center gap-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10">
-                      <Trash2 className="w-4 h-4" />
+                    <Button variant="ghost" size="icon" className="w-11 h-11 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10 transition-all">
+                      <Trash2 className="w-5 h-5" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="rounded-[2rem] border-2">
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the note for
-                        <span className="font-medium text-foreground"> {note.recipientEmail}</span>.
+                      <AlertDialogTitle className="text-2xl font-serif text-primary">Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription className="text-lg font-medium">
+                        This action cannot be undone. This will permanently delete the note.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleDelete(note.id)} className="bg-destructive hover:bg-destructive/90">
-                        Delete
+                    <AlertDialogFooter className="gap-2">
+                      <AlertDialogCancel className="rounded-full h-11 px-6 font-bold">Keep Note</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDelete(note.id)} className="bg-destructive hover:bg-destructive/90 rounded-full h-11 px-8 font-bold">
+                        Delete Forever
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

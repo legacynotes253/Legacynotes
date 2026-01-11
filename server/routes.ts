@@ -70,6 +70,25 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     res.json(settings);
   });
 
+  app.post("/api/settings/test-reminder", isAuthenticated, async (req: any, res) => {
+    const userId = req.user.claims.sub;
+    const settings = await storage.getUserSettings(userId);
+    
+    if (!settings?.notificationPhone) {
+      return res.status(400).json({ message: "Please set a notification phone number first." });
+    }
+
+    try {
+      await sendSms(
+        settings.notificationPhone, 
+        "LegacyNotes: This is a test reminder. Please check in soon to keep your account active! ✨"
+      );
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Test Route for SMS (Optional/Internal)
   app.post("/api/test-sms", isAuthenticated, async (req: any, res) => {
     const { to, message } = req.body;

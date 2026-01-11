@@ -53,7 +53,8 @@ export class DatabaseStorage implements IStorage {
       userId,
       checkInFrequencyDays: 30,
       releaseDelayDays: 7,
-      status: 'active'
+      status: 'active',
+      notificationPhone: '',
     }).returning();
     return settings;
   }

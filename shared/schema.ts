@@ -22,6 +22,8 @@ export const userSettings = pgTable("user_settings", {
   userId: text("user_id").notNull().unique(),
   checkInFrequencyDays: integer("check_in_frequency_days").default(30).notNull(),
   lastCheckIn: timestamp("last_check_in").defaultNow().notNull(),
+  lastNotificationSent: timestamp("last_notification_sent"),
+  notificationPhone: text("notification_phone"),
   releaseDelayDays: integer("release_delay_days").default(7).notNull(),
   status: text("status").default("active").notNull(), // active, warning, released
 });

@@ -15,6 +15,7 @@ export const notes = pgTable("notes", {
   attachments: text("attachments").array(), // Array of file URLs or JSON strings
   isReleased: boolean("is_released").default(false),
   createdAt: timestamp("created_at").defaultNow(),
+  lastEdited: timestamp("last_edited").defaultNow().notNull(),
 });
 
 export const userSettings = pgTable("user_settings", {

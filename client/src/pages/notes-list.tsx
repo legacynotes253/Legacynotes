@@ -103,7 +103,13 @@ export default function NotesList() {
                     <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
                       <Calendar className="w-4 h-4 text-primary/60" />
                     </div>
-                    {format(new Date(note.createdAt!), "MMM d, yyyy")}
+                    <span>Created {format(new Date(note.createdAt!), "MMM d, yyyy")}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
+                      <Edit2 className="w-4 h-4 text-primary/60" />
+                    </div>
+                    <span>Last edited {format(new Date(note.lastEdited), "MMM d, yyyy HH:mm")}</span>
                   </div>
                 </div>
 

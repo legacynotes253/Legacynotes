@@ -34,7 +34,8 @@ export class DatabaseStorage implements IStorage {
       recipientPhone: note.recipientPhone,
       title: note.title,
       content: note.content,
-      attachments: note.attachments || []
+      attachments: note.attachments || [],
+      lastEdited: new Date()
     }).returning();
     return created;
   }
@@ -45,7 +46,7 @@ export class DatabaseStorage implements IStorage {
 
   async updateNote(userId: string, id: number, updates: Partial<InsertNote>): Promise<Note> {
     const [updated] = await db.update(notes)
-      .set(updates)
+      .set({ ...updates, lastEdited: new Date() })
       .where(and(eq(notes.id, id), eq(notes.userId, userId)))
       .returning();
     

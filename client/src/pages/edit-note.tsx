@@ -15,18 +15,26 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation, useParams } from "wouter";
-import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X } from "lucide-react";
+import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X, FolderHeart } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import { useUpload } from "@/hooks/use-upload";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   recipientEmail: z.string().email().optional().or(z.literal("")),
   recipientPhone: z.string().optional().or(z.literal("")),
   content: z.string().min(1, "Message content is required"),
+  folder: z.string().default("General"),
 }).refine((data) => data.recipientEmail || data.recipientPhone, {
   message: "Either recipient email or phone number must be provided",
   path: ["recipientEmail"],
@@ -54,6 +62,7 @@ export default function EditNote() {
       recipientEmail: "",
       recipientPhone: "",
       content: "",
+      folder: "General",
     },
   });
 
@@ -64,6 +73,7 @@ export default function EditNote() {
         recipientEmail: note.recipientEmail || "",
         recipientPhone: note.recipientPhone || "",
         content: note.content,
+        folder: note.folder || "General",
       });
       setAttachments(note.attachments || []);
     }
@@ -178,6 +188,33 @@ export default function EditNote() {
                               <Input placeholder="+1 234 567 890" {...field} className="h-14 pl-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full" />
                             </div>
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="folder"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-lg font-bold text-foreground/80 flex items-center gap-2">
+                            <FolderHeart className="w-5 h-5 text-primary/60" /> Folder
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="h-14 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full">
+                                <SelectValue placeholder="Select a folder" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="rounded-2xl border-2">
+                              <SelectItem value="General">General</SelectItem>
+                              <SelectItem value="Family">Family</SelectItem>
+                              <SelectItem value="Friends">Friends</SelectItem>
+                              <SelectItem value="Work">Work</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}

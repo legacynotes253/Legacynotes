@@ -16,6 +16,7 @@ export const notes = pgTable("notes", {
   isReleased: boolean("is_released").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   lastEdited: timestamp("last_edited").defaultNow().notNull(),
+  folder: text("folder").default("General").notNull(),
 });
 
 export const userSettings = pgTable("user_settings", {
@@ -44,13 +45,14 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   }),
 }));
 
-export const baseInsertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, isReleased: true, userId: true });
+export const baseInsertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, lastEdited: true, isReleased: true, userId: true });
 
 export const insertNoteSchema = baseInsertNoteSchema
   .extend({
     recipientEmail: z.string().email().optional().or(z.literal("")),
     recipientPhone: z.string().optional().or(z.literal("")),
-    attachments: z.array(z.string()).optional(),
+    attachments: z.array(z.string()).default([]),
+    folder: z.string().default("General"),
   })
   .refine((data) => data.recipientEmail || data.recipientPhone, {
     message: "Either recipient email or phone number must be provided",

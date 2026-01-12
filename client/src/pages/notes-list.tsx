@@ -1,8 +1,10 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2 } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +22,12 @@ export default function NotesList() {
   const { data: notes, isLoading } = useNotes();
   const { mutate: deleteNote } = useDeleteNote();
   const { toast } = useToast();
+  const [selectedFolder, setSelectedFolder] = useState<string>("All");
+
+  const folders = ["All", ...Array.from(new Set(notes?.map(n => n.folder) || []))];
+  const filteredNotes = selectedFolder === "All" 
+    ? notes 
+    : notes?.filter(n => n.folder === selectedFolder);
 
   const handleDelete = (id: number) => {
     deleteNote(id, {
@@ -48,6 +56,22 @@ export default function NotesList() {
         </Button>
       </div>
 
+      {!isLoading && (notes?.length || 0) > 0 && (
+        <div className="flex flex-wrap gap-2 pb-2">
+          {folders.map(folder => (
+            <Button
+              key={folder}
+              variant={selectedFolder === folder ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedFolder(folder)}
+              className="rounded-full px-5 font-bold transition-all"
+            >
+              {folder}
+            </Button>
+          ))}
+        </div>
+      )}
+
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
@@ -69,17 +93,22 @@ export default function NotesList() {
         </div>
       ) : (
         <div className="grid gap-6">
-          {notes?.map((note) => (
+          {filteredNotes?.map((note) => (
             <div
               key={note.id}
-              className="group bg-white border-2 border-border/40 rounded-[2rem] p-8 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
+              className="group bg-white border-2 border-border/40 rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
             >
               <div className="space-y-4 flex-1">
                 <div className="flex items-center justify-between md:justify-start gap-4">
-                  <h3 className="font-bold text-xl text-primary">{note.title}</h3>
-                  <span className="text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/10">
-                    Secure
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-primary/5 flex items-center justify-center border-2 border-primary/10">
+                      <FolderHeart className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-bold text-xl text-primary">{note.title}</h3>
+                  </div>
+                  <Badge variant="secondary" className="rounded-full px-3 py-1 font-bold text-[10px] uppercase tracking-wider">
+                    {note.folder || "General"}
+                  </Badge>
                 </div>
                 
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground">

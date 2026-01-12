@@ -1,6 +1,6 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart, Music, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart, Music, Image as ImageIcon, Video } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -171,6 +171,26 @@ export default function NotesList() {
                       </div>
                     )}
 
+                    {/* Video Preview */}
+                    {note.attachments.some(url => url.match(/\.(mp4|webm|ogg|mov)$/i)) && (
+                      <div className="space-y-3">
+                        {note.attachments
+                          .filter(url => url.match(/\.(mp4|webm|ogg|mov)$/i))
+                          .map((url, idx) => (
+                            <div key={idx} className="aspect-video rounded-2xl overflow-hidden border-2 border-border/10 bg-black relative group/vid">
+                              <video controls className="w-full h-full object-contain">
+                                <source src={url} />
+                                Your browser does not support the video element.
+                              </video>
+                              <div className="absolute top-3 left-3 px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full flex items-center gap-2 pointer-events-none">
+                                <Video className="w-3 h-3 text-white" />
+                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Video</span>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+
                     {/* Audio Preview */}
                     {note.attachments.some(url => url.match(/\.(mp3|wav|ogg|m4a)$/i)) && (
                       <div className="space-y-2">
@@ -193,7 +213,7 @@ export default function NotesList() {
                     {/* Other Attachments */}
                     <div className="flex flex-wrap gap-2">
                       {note.attachments
-                        .filter(url => !url.match(/\.(jpg|jpeg|png|gif|webp|mp3|wav|ogg|m4a)$|^data:image/i))
+                        .filter(url => !url.match(/\.(jpg|jpeg|png|gif|webp|mp3|wav|ogg|m4a|mp4|webm|mov)$|^data:image/i))
                         .map((url, idx) => (
                           <a 
                             key={idx} 

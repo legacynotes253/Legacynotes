@@ -294,10 +294,10 @@ export default function EditNote() {
                                       setAttachments(prev => [...prev, ...newUrls]);
                                     }
                                   }}
-                                  maxNumberOfFiles={10}
+                                  maxNumberOfFiles={15}
                                   buttonClassName="h-9 px-4 rounded-full border-2 border-dashed border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary font-bold text-sm transition-all flex items-center gap-2"
                                 >
-                                  <Paperclip className="w-4 h-4" /> Add Photos or Music
+                                  <Paperclip className="w-4 h-4" /> Add Photos, Videos, or Music
                                 </ObjectUploader>
                               </div>
                             </div>

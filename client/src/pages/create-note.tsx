@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
-import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X, FolderHeart } from "lucide-react";
+import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X, FolderHeart, Mic } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ObjectUploader } from "@/components/ObjectUploader";
+import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { useUpload } from "@/hooks/use-upload";
 import {
   Select,
@@ -279,6 +280,42 @@ export default function CreateNote() {
                                   <Paperclip className="w-4 h-4" /> Add Photos, Videos, or Music
                                 </ObjectUploader>
                               </div>
+                            </div>
+
+                            <div className="space-y-3">
+                              <FormLabel className="text-sm font-bold text-foreground/60 flex items-center gap-2">
+                                <Mic className="w-4 h-4" /> Record Voice Note
+                              </FormLabel>
+                              <VoiceRecorder 
+                                onRecordingComplete={async (blob) => {
+                                  try {
+                                    const file = new File([blob], `voice-note-${Date.now()}.wav`, { type: 'audio/wav' });
+                                    const params = await getUploadParameters(file as any);
+                                    
+                                    const response = await fetch(params.url, {
+                                      method: params.method,
+                                      body: blob,
+                                      headers: params.headers
+                                    });
+
+                                    if (response.ok) {
+                                      const url = new URL(params.url);
+                                      const publicUrl = `${url.origin}${url.pathname}`;
+                                      setAttachments(prev => [...prev, publicUrl]);
+                                      toast({
+                                        title: "Voice Note Added",
+                                        description: "Your recording has been uploaded successfully."
+                                      });
+                                    }
+                                  } catch (err) {
+                                    toast({
+                                      title: "Upload Failed",
+                                      description: "Could not save your voice note.",
+                                      variant: "destructive"
+                                    });
+                                  }
+                                }}
+                              />
                             </div>
                           </div>
                         </FormControl>

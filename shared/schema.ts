@@ -17,6 +17,8 @@ export const notes = pgTable("notes", {
   createdAt: timestamp("created_at").defaultNow(),
   lastEdited: timestamp("last_edited").defaultNow().notNull(),
   folder: text("folder").default("General").notNull(),
+  accessCode: text("access_code"),
+  accessHint: text("access_hint"),
 });
 
 export const userSettings = pgTable("user_settings", {
@@ -53,6 +55,8 @@ export const insertNoteSchema = baseInsertNoteSchema
     recipientPhone: z.string().optional().or(z.literal("")),
     attachments: z.array(z.string()).default([]),
     folder: z.string().default("General"),
+    accessCode: z.string().optional().or(z.literal("")),
+    accessHint: z.string().optional().or(z.literal("")),
   })
   .refine((data) => data.recipientEmail || data.recipientPhone, {
     message: "Either recipient email or phone number must be provided",

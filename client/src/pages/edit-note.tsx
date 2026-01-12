@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation, useParams } from "wouter";
-import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X, FolderHeart, Mic } from "lucide-react";
+import { ArrowLeft, Lock, Mail, Phone, Sparkles, ChevronRight, PenTool, Paperclip, X, FolderHeart, Mic, KeyRound, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,6 +36,8 @@ const formSchema = z.object({
   recipientPhone: z.string().optional().or(z.literal("")),
   content: z.string().min(1, "Message content is required"),
   folder: z.string().default("General"),
+  accessCode: z.string().optional().or(z.literal("")),
+  accessHint: z.string().optional().or(z.literal("")),
 }).refine((data) => data.recipientEmail || data.recipientPhone, {
   message: "Either recipient email or phone number must be provided",
   path: ["recipientEmail"],
@@ -64,6 +66,8 @@ export default function EditNote() {
       recipientPhone: "",
       content: "",
       folder: "General",
+      accessCode: "",
+      accessHint: "",
     },
   });
 
@@ -75,6 +79,8 @@ export default function EditNote() {
         recipientPhone: note.recipientPhone || "",
         content: note.content,
         folder: note.folder || "General",
+        accessCode: note.accessCode || "",
+        accessHint: note.accessHint || "",
       });
       setAttachments(note.attachments || []);
     }
@@ -234,6 +240,47 @@ export default function EditNote() {
                         </FormItem>
                       )}
                     />
+
+                    <div className="space-y-6 pt-4 border-t-2 border-dashed border-border/20">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-bold text-primary flex items-center gap-2">
+                          <KeyRound className="w-5 h-5" /> Security Access
+                        </h4>
+                        <p className="text-sm text-muted-foreground font-medium">
+                          Protect this note with a code and provide a hint for your loved one.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="accessCode"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="font-bold">Access Code</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Secret code..." {...field} className="h-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="accessHint"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="font-bold">Hint for Recipient</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Something they would know..." {...field} className="h-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex justify-end pt-6 pr-4">

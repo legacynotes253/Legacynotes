@@ -36,6 +36,8 @@ export class DatabaseStorage implements IStorage {
       content: note.content,
       attachments: note.attachments || [],
       folder: note.folder || "General",
+      accessCode: note.accessCode || null,
+      accessHint: note.accessHint || null,
       lastEdited: new Date()
     }).returning();
     return created;

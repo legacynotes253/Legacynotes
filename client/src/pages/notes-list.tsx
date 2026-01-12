@@ -1,6 +1,6 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart, Music, Image as ImageIcon } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -149,19 +149,64 @@ export default function NotesList() {
                 </div>
 
                 {note.attachments && note.attachments.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {note.attachments.map((url: string, idx: number) => (
-                      <a 
-                        key={idx} 
-                        href={url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-primary/5 border border-primary/10 px-3 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-primary/10 transition-colors"
-                      >
-                        <Paperclip className="w-3 h-3" />
-                        {url.split('/').pop()}
-                      </a>
-                    ))}
+                  <div className="flex flex-col gap-4 pt-2">
+                    {/* Image Preview Grid */}
+                    {note.attachments.some(url => url.match(/\.(jpg|jpeg|png|gif|webp)$|^data:image/i)) && (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {note.attachments
+                          .filter(url => url.match(/\.(jpg|jpeg|png|gif|webp)$|^data:image/i))
+                          .map((url, idx) => (
+                            <div key={idx} className="aspect-square rounded-2xl overflow-hidden border-2 border-border/10 relative group/img">
+                              <img src={url} alt="Attachment" className="w-full h-full object-cover transition-transform group-hover/img:scale-110" />
+                              <a 
+                                href={url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center text-white"
+                              >
+                                <ImageIcon className="w-6 h-6" />
+                              </a>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+
+                    {/* Audio Preview */}
+                    {note.attachments.some(url => url.match(/\.(mp3|wav|ogg|m4a)$/i)) && (
+                      <div className="space-y-2">
+                        {note.attachments
+                          .filter(url => url.match(/\.(mp3|wav|ogg|m4a)$/i))
+                          .map((url, idx) => (
+                            <div key={idx} className="flex items-center gap-4 bg-primary/5 border-2 border-primary/10 p-3 rounded-2xl">
+                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <Music className="w-5 h-5 text-primary" />
+                              </div>
+                              <audio controls className="h-8 flex-1">
+                                <source src={url} />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+
+                    {/* Other Attachments */}
+                    <div className="flex flex-wrap gap-2">
+                      {note.attachments
+                        .filter(url => !url.match(/\.(jpg|jpeg|png|gif|webp|mp3|wav|ogg|m4a)$|^data:image/i))
+                        .map((url, idx) => (
+                          <a 
+                            key={idx} 
+                            href={url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-primary/5 border border-primary/10 px-3 py-1.5 rounded-full text-xs font-bold text-primary hover:bg-primary/10 transition-colors"
+                          >
+                            <Paperclip className="w-3 h-3" />
+                            {url.split('/').pop()}
+                          </a>
+                        ))}
+                    </div>
                   </div>
                 )}
               </div>

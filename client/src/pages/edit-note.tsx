@@ -201,20 +201,34 @@ export default function EditNote() {
                           <FormLabel className="text-lg font-bold text-foreground/80 flex items-center gap-2">
                             <FolderHeart className="w-5 h-5 text-primary/60" /> Folder
                           </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-14 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full">
-                                <SelectValue placeholder="Select a folder" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-2xl border-2">
-                              <SelectItem value="General">General</SelectItem>
-                              <SelectItem value="Family">Family</SelectItem>
-                              <SelectItem value="Friends">Friends</SelectItem>
-                              <SelectItem value="Work">Work</SelectItem>
-                              <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <div className="flex gap-3">
+                            <div className="flex-1">
+                              <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-14 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full">
+                                    <SelectValue placeholder="Select a folder" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="rounded-2xl border-2">
+                                  <SelectItem value="General">General</SelectItem>
+                                  <SelectItem value="Family">Family</SelectItem>
+                                  <SelectItem value="Friends">Friends</SelectItem>
+                                  <SelectItem value="Work">Work</SelectItem>
+                                  <SelectItem value="Custom">Other (Custom)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          {field.value === "Custom" || !["General", "Family", "Friends", "Work"].includes(field.value) ? (
+                            <div className="mt-3">
+                              <Input 
+                                placeholder="Enter custom folder name..." 
+                                value={field.value === "Custom" ? "" : field.value}
+                                onChange={(e) => field.onChange(e.target.value)}
+                                className="h-12 border-2 border-border/40 rounded-2xl focus-visible:ring-primary/10 bg-muted/20 text-lg font-medium w-full"
+                              />
+                            </div>
+                          ) : null}
                           <FormMessage />
                         </FormItem>
                       )}

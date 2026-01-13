@@ -224,7 +224,7 @@ export default function CreateNote() {
                           <KeyRound className="w-5 h-5" /> Security Access
                         </h4>
                         <p className="text-sm text-muted-foreground font-medium">
-                          Protect this note with a code and provide a hint for your loved one.
+                          Optional: Protect this note with a code and provide a hint for your loved one.
                         </p>
                       </div>
 

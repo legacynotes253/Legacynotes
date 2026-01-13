@@ -21,6 +21,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import { VoiceRecorder } from "@/components/VoiceRecorder";
+import { NotePreview } from "@/components/NotePreview";
 import { useUpload } from "@/hooks/use-upload";
 import {
   Select,
@@ -50,6 +51,7 @@ export default function CreateNote() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [step, setStep] = useState(1);
+  const [previewMode, setPreviewMode] = useState<"email" | "sms">("email");
 
   const { getUploadParameters } = useUpload();
   const [attachments, setAttachments] = useState<string[]>([]);
@@ -87,14 +89,16 @@ export default function CreateNote() {
   };
 
   const nextStep = async () => {
-    const fields = ["title", "recipientEmail", "recipientPhone"];
+    const fields = step === 1 
+      ? ["title", "recipientEmail", "recipientPhone"]
+      : ["content"];
     const isValid = await form.trigger(fields as any);
     if (isValid) {
-      setStep(2);
+      setStep(prev => prev + 1);
     }
   };
 
-  const prevStep = () => setStep(1);
+  const prevStep = () => setStep(prev => prev - 1);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-24 pt-12 px-6">
@@ -107,11 +111,11 @@ export default function CreateNote() {
         <div className="space-y-2">
           <h1 className="text-4xl font-serif text-primary flex items-center gap-3">
             <Sparkles className="w-8 h-8 text-primary/20 animate-pulse" />
-            {step === 1 ? "Note Details" : "Write Message"}
+            {step === 1 ? "Note Details" : step === 2 ? "Write Message" : "Preview Delivery"}
           </h1>
           <p className="text-muted-foreground font-medium flex items-center gap-2">
             <Lock className="w-4 h-4 text-primary/40" />
-            {step === 1 ? "Who gets the tea?" : "Spill the real tea here."}
+            {step === 1 ? "Who gets the tea?" : step === 2 ? "Spill the real tea here." : "How they'll see your message."}
           </p>
         </div>
       </div>
@@ -266,7 +270,7 @@ export default function CreateNote() {
                     </Button>
                   </div>
                 </motion.div>
-              ) : (
+              ) : step === 2 ? (
                 <motion.div
                   key="step2"
                   initial={{ x: 20, opacity: 0 }}
@@ -373,8 +377,62 @@ export default function CreateNote() {
                     <Button type="button" variant="ghost" onClick={prevStep} className="text-muted-foreground hover:text-primary font-bold rounded-full">
                       <ArrowLeft className="mr-2 w-4 h-4" /> Go Back
                     </Button>
-                    <Button type="submit" disabled={isPending} className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
-                      {isPending ? "Securing..." : "Keep it Safe! ✨"}
+                    <Button type="button" onClick={nextStep} className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
+                      Next: Preview Note <ChevronRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="step3"
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="space-y-8"
+                >
+                  <div className="flex flex-col gap-8">
+                    <div className="flex items-center justify-center gap-4 bg-muted/20 p-2 rounded-full w-fit mx-auto border-2">
+                      <Button
+                        type="button"
+                        variant={previewMode === "email" ? "default" : "ghost"}
+                        onClick={() => setPreviewMode("email")}
+                        className="rounded-full font-bold px-6"
+                        size="sm"
+                      >
+                        <Mail className="w-4 h-4 mr-2" /> Email Preview
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={previewMode === "sms" ? "default" : "ghost"}
+                        onClick={() => setPreviewMode("sms")}
+                        className="rounded-full font-bold px-6"
+                        size="sm"
+                      >
+                        <Phone className="w-4 h-4 mr-2" /> SMS Preview
+                      </Button>
+                    </div>
+
+                    <div className="max-w-xl mx-auto w-full">
+                      <NotePreview
+                        title={form.getValues("title")}
+                        content={form.getValues("content")}
+                        recipientEmail={form.getValues("recipientEmail")}
+                        recipientPhone={form.getValues("recipientPhone")}
+                        attachments={attachments}
+                        accessCode={form.getValues("accessCode")}
+                        accessHint={form.getValues("accessHint")}
+                        mode={previewMode}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between pt-6 max-w-2xl mx-auto border-t-2 border-dashed border-border/20">
+                    <Button type="button" variant="ghost" onClick={prevStep} className="text-muted-foreground hover:text-primary font-bold rounded-full">
+                      <ArrowLeft className="mr-2 w-4 h-4" /> Edit Message
+                    </Button>
+                    <Button type="submit" disabled={isPending} className="px-12 h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-xl font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+                      {isPending ? "Securing..." : "Confirm & Save! ✨"}
+                      <Sparkles className="w-6 h-6" />
                     </Button>
                   </div>
                 </motion.div>

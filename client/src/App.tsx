@@ -14,6 +14,7 @@ import NotesList from "@/pages/notes-list";
 import CreateNote from "@/pages/create-note";
 import EditNote from "@/pages/edit-note";
 import SettingsPage from "@/pages/settings";
+import BookView from "@/pages/book-view";
 import Layout from "@/components/layout";
 
 function AuthenticatedApp() {
@@ -22,6 +23,7 @@ function AuthenticatedApp() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/notes" component={NotesList} />
+        <Route path="/book" component={BookView} />
         <Route path="/notes/new" component={CreateNote} />
         <Route path="/notes/edit/:id" component={EditNote} />
         <Route path="/settings" component={SettingsPage} />

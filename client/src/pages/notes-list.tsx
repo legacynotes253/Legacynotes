@@ -1,6 +1,6 @@
 import { useNotes, useDeleteNote } from "@/hooks/use-notes";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart, Music, Image as ImageIcon, Video } from "lucide-react";
+import { Plus, Trash2, Mail, Calendar, Paperclip, Phone, Edit2, FolderHeart, Music, Image as ImageIcon, Video, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -49,11 +49,18 @@ export default function NotesList() {
             Secure messages waiting to be delivered.
           </p>
         </div>
-        <Button asChild className="gap-2 shadow-md rounded-full h-11 px-6">
-          <Link href="/notes/new">
-            <Plus className="w-4 h-4" /> New Note
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/book">
+            <Button variant="outline" className="gap-2 rounded-full h-11 px-6 border-2 hover:bg-primary/5 transition-all">
+              <BookOpen className="w-4 h-4 text-primary" /> Read My Book
+            </Button>
           </Link>
-        </Button>
+          <Button asChild className="gap-2 shadow-md rounded-full h-11 px-6">
+            <Link href="/notes/new">
+              <Plus className="w-4 h-4" /> New Note
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {!isLoading && (notes?.length || 0) > 0 && (
